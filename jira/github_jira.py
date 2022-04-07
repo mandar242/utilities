@@ -10,6 +10,7 @@ import yaml
 with open('config') as f:
     """
     config is a file that contains these keys:
+    jira_token: personal access token
     jira_user: yournamehere
     jira_pw: foobarbaz
     jira_server: https://jira.example.com
@@ -23,7 +24,8 @@ CLOUD_REPOS = ['ansible-collections/amazon.aws',
                'ansible-collections/vmware.vmware_rest']
 
 g = Github(config['gh_token'])
-jiraconn = JIRA(basic_auth=(config['jira_user'], config['jira_pw']), server=config['jira_server'])
+#jiraconn = JIRA(token_auth=config[jira_token']), server=config['jira_server'])
+jiraconn = JIRA(token_auth=config['jira_token'], server=config['jira_server'])
 
 jira_issues = jiraconn.search_issues('project=ACA and labels=github')
 
@@ -62,6 +64,7 @@ for bug in to_create:
     else:
         label = 'kubernetes'
         component = ctn_native_comp
+#    if bug.label = 'CI' or 'ci':
 
     issue_template = {
         'project': 'ACA',
