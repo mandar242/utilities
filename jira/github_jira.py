@@ -20,8 +20,15 @@ with open('config') as f:
 
 CLOUD_REPOS = ['ansible-collections/amazon.aws',
                'ansible-collections/kubernetes.core',
+               'ansible-collections/amazon.cloud',
+               'ansible-collections/cloud.terraform',
                'ansible-collections/community.okd',
-               'ansible-collections/vmware.vmware_rest']
+               'ansible-collections/vmware.vmware_rest',
+               'redhat-cop/cloud.aws_ops',
+               'redhat-cop/cloud.aws_troubleshooting',
+               'redhat-cop/cloud.azure_ops',
+               'redhat-cop/cloud.gcp_ops',
+]
 
 g = Github(config['gh_token'])
 #jiraconn = JIRA(token_auth=config[jira_token']), server=config['jira_server'])
@@ -72,8 +79,13 @@ for bug in to_create:
         'description': '{0} \n {1}'.format(bug.html_url, bug.body),
         'issuetype': {'name': 'Bug'},
         'labels': ['github', label],
-        'priority': {'name': 'Unprioritized'},
+        'priority': {'name': 'Undefined'},
         'components': [{'name': component.name}],
+        'versions':  [{'id': '12398634'}],
     }
+#versions = jiraconn.project_versions('ACA')
+#print([v for v in reversed(versions)])
+#[<JIRA Version: name='2.5', id='12401238'>, <JIRA Version: name='Unspecified', id='12398634'>, <JIRA Version: name='2.4', id='12397364'>, <JIRA Version: name='2.3', id='12385838'>]
     issue = jiraconn.create_issue(fields=issue_template)
     print(issue.id)
+
