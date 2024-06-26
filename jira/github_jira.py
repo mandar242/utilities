@@ -28,13 +28,12 @@ CLOUD_REPOS = ['ansible-collections/amazon.aws',
                'redhat-cop/cloud.aws_troubleshooting',
                'redhat-cop/cloud.azure_ops',
                'redhat-cop/cloud.gcp_ops',
+               'redhat-cop/cloud.terraform_ops',
 ]
 
 g = Github(config['gh_token'])
-#jiraconn = JIRA(token_auth=config[jira_token']), server=config['jira_server'])
 jiraconn = JIRA(token_auth=config['jira_token'], server=config['jira_server'])
-
-jira_issues = jiraconn.search_issues('project=ACA and labels=github')
+jira_issues = jiraconn.search_issues('project=ACA and labels=github', maxResults=1000)
 
 # Component are resource objects
 prj_components = jiraconn.project_components(project='ACA')
@@ -55,8 +54,9 @@ for repo_name in CLOUD_REPOS:
     github_issues.extend(issues)
 
 to_create = []
+jira_things = [jira_obj.fields.description for jira_obj in jira_issues]
 for bug in github_issues:
-    jira_things = [jira_obj.fields.description for jira_obj in jira_issues]
+    # jira_things = [jira_obj.fields.description for jira_obj in jira_issues]
     # If the Github URL does not appear in any github-labelled Jira issue descriptions, we will a new Jira bug
     if not any([bug.html_url in jira_obj.fields.description for jira_obj in jira_issues]):
         to_create.append(bug)
@@ -80,7 +80,7 @@ for bug in to_create:
         'issuetype': {'name': 'Bug'},
         'labels': ['github', label],
         'priority': {'name': 'Undefined'},
-        'components': [{'name': component.name}],
+        'components': [{'name': component.name}, {'name': 'cloud-content'}],
         'versions':  [{'id': '12398634'}],
     }
 #versions = jiraconn.project_versions('ACA')
@@ -88,4 +88,6 @@ for bug in to_create:
 #[<JIRA Version: name='2.5', id='12401238'>, <JIRA Version: name='Unspecified', id='12398634'>, <JIRA Version: name='2.4', id='12397364'>, <JIRA Version: name='2.3', id='12385838'>]
     issue = jiraconn.create_issue(fields=issue_template)
     print(issue.id)
+    # Transition the issue from New to Backlog
+    jiraconn.transition_issue(issue.id, "Backlog")
 
