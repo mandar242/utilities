@@ -19,6 +19,7 @@ with open('config') as f:
     config = yaml.safe_load(f)
 
 CLOUD_REPOS = ['ansible-collections/amazon.aws',
+               'ansible-collections/community.aws',
                'ansible-collections/kubernetes.core',
                'ansible-collections/amazon.cloud',
                'ansible-collections/cloud.terraform',
@@ -62,7 +63,7 @@ for bug in github_issues:
         to_create.append(bug)
 
 for bug in to_create:
-    if bug.repository.name == 'amazon.aws':
+    if bug.repository.name in ['amazon.aws', 'community.aws']:
         label = 'aws'
         component = pub_cloud_comp
     elif bug.repository.name == 'vmware.vmware_rest':
