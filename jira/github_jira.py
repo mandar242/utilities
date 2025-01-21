@@ -62,6 +62,17 @@ for bug in github_issues:
     if not any([bug.html_url in jira_obj.fields.description for jira_obj in jira_issues]):
         to_create.append(bug)
 
+dod_title = "Definition of Done"
+dod_content = """
+* Code Quality: Code adheres to team coding standards and is well-documented.
+* Testing: All tests pass successfully, and relevant tests are updated.
+* Review and Approval: PR has been reviewed, and feedback has been addressed.
+* Documentation: Relevant documentation has been updated (e.g., README, release notes).
+* Functionality: Code meets requirements and works as expected without regressions.
+* Merging: PR is up to date with the base branch and free of merge conflicts.
+* Backporting: Relevant backport labels are added based on the nature of the fix, and backported PRs are approved and merged.
+"""
+
 for bug in to_create:
     if bug.repository.name in ['amazon.aws', 'community.aws']:
         label = 'aws'
@@ -77,7 +88,7 @@ for bug in to_create:
     issue_template = {
         'project': 'ACA',
         'summary': '[{0}/{1}] {2}'.format(bug.repository.name, bug.number, bug.title),
-        'description': '{0} \n {1}'.format(bug.html_url, bug.body),
+        'description': '{0} \n {1} \n h3. {2} \n {3}'.format(bug.html_url, bug.body, dod_title, dod_content),
         'issuetype': {'name': 'Bug'},
         'labels': ['github', label],
         'priority': {'name': 'Undefined'},
