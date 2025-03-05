@@ -19,17 +19,18 @@ with open('config') as f:
     config = yaml.safe_load(f)
 
 CLOUD_REPOS = ['ansible-collections/amazon.aws',
-               'ansible-collections/community.aws',
                'ansible-collections/kubernetes.core',
                'ansible-collections/amazon.cloud',
                'ansible-collections/cloud.terraform',
+               'ansible-collections/cloud.common',
+               'ansible-collections/community.aws',
                'ansible-collections/community.okd',
-               'ansible-collections/vmware.vmware_rest',
                'redhat-cop/cloud.aws_ops',
                'redhat-cop/cloud.aws_troubleshooting',
-               'redhat-cop/cloud.azure_ops',
                'redhat-cop/cloud.gcp_ops',
                'redhat-cop/cloud.terraform_ops',
+               'ansible/terraform-provider-aap',
+               'ansible/terraform-provider-provider',
 ]
 
 g = Github(config['gh_token'])
