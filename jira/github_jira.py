@@ -30,7 +30,7 @@ CLOUD_REPOS = ['ansible-collections/amazon.aws',
                'redhat-cop/cloud.gcp_ops',
                'redhat-cop/cloud.terraform_ops',
                'ansible/terraform-provider-aap',
-               'ansible/terraform-provider-provider',
+               'ansible/terraform-provider-ansible',
 ]
 
 g = Github(config['gh_token'])
