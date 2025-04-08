@@ -5,7 +5,10 @@
 
 from jira import JIRA
 from github import Github
+from get_jira_auth import get_secret
 import yaml
+
+cloud_team_jira_secrets = get_secret()
 
 with open('config') as f:
     """
@@ -34,7 +37,7 @@ CLOUD_REPOS = ['ansible-collections/amazon.aws',
 ]
 
 g = Github(config['gh_token'])
-jiraconn = JIRA(token_auth=config['jira_token'], server=config['jira_server'])
+jiraconn = JIRA(token_auth=cloud_team_jira_secrets["jira_token"], server=cloud_team_jira_secrets["jira_server"])
 jira_issues = jiraconn.search_issues('project=ACA and labels=github', maxResults=1000)
 
 # Component are resource objects
